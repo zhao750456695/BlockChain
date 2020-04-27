@@ -2,7 +2,6 @@ package main
 
 import (
 	"bytes"
-	"crypto/sha256"
 	"encoding/binary"
 	"log"
 	"time"
@@ -59,38 +58,46 @@ func NewBlock(data string, prevBloackHash []byte) *Block {
 		Data: []byte(data),
 
 	}
-	block.SetHash()
+	// block.SetHash()
+	// 创建一个pow对象
+	pow := NewProofOfWork(&block)
+	// 查找随机数，不停地进行计算
+	hash, nonce := pow.Run()
+	// 根据挖矿结果对区块数据进行更新（补充）
+	block.Hash = hash
+	block.Nonce = nonce
+
 	return &block
 }
 
 //3.生成哈希
-func (block *Block) SetHash() {
-	//var blockInfo []byte
-	// 1.拼接数据
-	//blockInfo := append(blockInfo, block.Data...) // ... 第二个用法是slice可以被打散进行传递
-	//blockInfo = append(blockInfo, Uint64ToByte(block.Version)...)
-	//blockInfo = append(blockInfo, block.PrevHash...)
-	//blockInfo = append(blockInfo, block.MerkelRoot...)
-	//blockInfo = append(blockInfo, Uint64ToByte(block.TimeStamp)...)
-	//blockInfo = append(blockInfo, Uint64ToByte(block.Difficulty)...)
-	//blockInfo = append(blockInfo, Uint64ToByte(block.Nonce)...)
-	//blockInfo = append(blockInfo, block.Data...)
-
-	tmp := [][]byte{
-		Uint64ToByte(block.Version),
-		block.PrevHash,
-		block.MerkelRoot,
-		Uint64ToByte(block.TimeStamp),
-		Uint64ToByte(block.Difficulty),
-		Uint64ToByte(block.Nonce),
-		block.Data,
-	}
-
-	// 将二维的切片数组连接起来，返回一个一维切片
-	blockInfo := bytes.Join(tmp, []byte{}) // 用空的byte拼接
-
-	// 2.sha256
-	hash := sha256.Sum256(blockInfo)
-	block.Hash = hash[:]
-
-}
+//func (block *Block) SetHash() {
+//	//var blockInfo []byte
+//	// 1.拼接数据
+//	//blockInfo := append(blockInfo, block.Data...) // ... 第二个用法是slice可以被打散进行传递
+//	//blockInfo = append(blockInfo, Uint64ToByte(block.Version)...)
+//	//blockInfo = append(blockInfo, block.PrevHash...)
+//	//blockInfo = append(blockInfo, block.MerkelRoot...)
+//	//blockInfo = append(blockInfo, Uint64ToByte(block.TimeStamp)...)
+//	//blockInfo = append(blockInfo, Uint64ToByte(block.Difficulty)...)
+//	//blockInfo = append(blockInfo, Uint64ToByte(block.Nonce)...)
+//	//blockInfo = append(blockInfo, block.Data...)
+//
+//	tmp := [][]byte{
+//		Uint64ToByte(block.Version),
+//		block.PrevHash,
+//		block.MerkelRoot,
+//		Uint64ToByte(block.TimeStamp),
+//		Uint64ToByte(block.Difficulty),
+//		Uint64ToByte(block.Nonce),
+//		block.Data,
+//	}
+//
+//	// 将二维的切片数组连接起来，返回一个一维切片
+//	blockInfo := bytes.Join(tmp, []byte{}) // 用空的byte拼接
+//
+//	// 2.sha256
+//	hash := sha256.Sum256(blockInfo)
+//	block.Hash = hash[:]
+//
+//}
