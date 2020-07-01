@@ -3,5 +3,8 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/src/github.com/boltdb/bolt" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/go-sql-driver/mysql" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/julienschmidt/httprouter" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/zhao750456695/video_server" vcs="Git" />
   </component>
 </project>

@@ -49,14 +49,14 @@ func NewBlockChain() *BlockChain{
 			// 3.写数据
 			// hash 作为key，block的字节流作为value，尚未实现
 			bucket.Put(genesisBlock.Hash, genesisBlock.Serialize())
+			// 最后区块的哈希
 			bucket.Put([]byte("lastHashKey"), genesisBlock.Hash)
-
+            // 没有区块则要取创世块的哈希
 			lastHash = genesisBlock.Hash
 		}else {
+			// 有区块则直接取最后区块的哈希
 			lastHash = bucket.Get([]byte("lastHashKey"))
-
 		}
-
 		return nil
 	})
 	return &BlockChain{db, lastHash}
@@ -83,16 +83,16 @@ func (bc *BlockChain)AddBlock(data string)  {
 		// a.创建新的区块
 		block := NewBlock(data, lastHash)
 
-		// b.添加到区块链db中
+		// b.添加到区块链db中，保存两部分
+		// 区块的 区块哈希 -> 区块序列化字节流
 		bucket.Put(block.Hash, block.Serialize())
+		// "lastHashKey" -> 最后区块的哈希
 		bucket.Put([]byte("lastHashKey"), block.Hash)
 
 		// c.更新内存中的区块链，把最后的小尾巴tail更新一下
 		bc.tail = block.Hash
         return nil
 	})
-	//
-
 
 	//// 获取最后一个区块
 	//lastBlock := bc.blocks[len(bc.blocks)-1]

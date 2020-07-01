@@ -28,12 +28,11 @@ type Block struct {
 	// 6.随机数，挖矿要找的数
 	Nonce uint64
 
-
 	// a.当前区块哈希
 	Hash []byte
+
 	// b.数据
 	Data []byte
-
 }
 
 // 实现一个辅助函数，功能是将uint64转成[]byte
